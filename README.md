@@ -1,3 +1,15 @@
+VDS documentation:
+
+1. Have Ruby, version 2.3.1 or newer. 
+2. Install bundler (gem install bundler)
+3. Run bundle install
+
+Building:
+1. bundle exec middleman build --clean
+
+Upload the whole build directory to S3: https://s3.console.aws.amazon.com/s3/buckets/verified-data-services/api
+
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/lord/img/master/logo-slate.png" alt="Slate: API Documentation Generator" width="226">
   <br>
