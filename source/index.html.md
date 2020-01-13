@@ -30,14 +30,14 @@ Create a criminal search request.
 import requests 
 import json
 
-# Search James Smith in Allegany, Maryland
-first_name = "James"
+# Search John Smith in Allegany, Maryland
+first_name = "John"
 middle_name = ""
 last_name = "Smith"
 county = "Allegany"
 state = "md"
 
-url = "https://f7tw2gz7ij.execute-api.us-east-1.amazonaws.com/prod/v1/search?" + 
+url = "https://api.verifieddataservices.com/v1/search?" + 
 "firstName={}&middleName={}&lastName={}&county={}&state={}".format(first_name, 
                                                                    middle_name, 
                                                                    last_name, 
@@ -66,7 +66,7 @@ Make sure to replace the API key and API token.
 
 ### HTTP Request
 
-`GET https://f7tw2gz7ij.execute-api.us-east-1.amazonaws.com/prod/v1/search`
+`GET https://api.verifieddataservices.com/v1/search`
 
 ### Query Parameters
 
@@ -77,6 +77,7 @@ middleName | No | Middle name of the person to search
 lastName | Yes | Last name of the person to search
 county | Yes | County to search the individual in
 state | Yes |  The corresponding state for the county to search the individual in
+dateOfBirth | No |  Date of birth for the person to search
 
 ### Response
 
@@ -94,7 +95,7 @@ import json
 # Get the results for the previous request with request_id: CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM
 request_id = "CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"
 
-poll_url = "https://f7tw2gz7ij.execute-api.us-east-1.amazonaws.com/prod/v1/records?request_id={}".format(request_id)
+poll_url = "https://api.verifieddataservices.com/v1/records?request_id={}".format(request_id)
 
 response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
 
@@ -117,7 +118,7 @@ result = json.loads(contents)
 {
 	"request": {
 		"request_id": "CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM",
-		"firstName": "James",
+		"firstName": "John",
 		"middleName": null,
 		"lastName": "Smith",
 		"address": null,
@@ -127,9 +128,9 @@ result = json.loads(contents)
 	},
 	"records": [{
 		"defendant_information": {
-			"name": "Smith, James Alexander",
+			"name": "Smith, John Alexander",
 			"dob": "01/01/1970",
-			"address": "12345 Main Street, FLINTSTONE MD, 21530-0000",
+			"address": "123 Main Street, FLINTSTONE MD, 21530-0000",
 			"race": "White",
 			"sex": "Male",
 			"eyes": null,
@@ -162,7 +163,7 @@ result = json.loads(contents)
 		}]
 	}, {
 		"defendant_information": {
-			"name": "Smith, James Peter",
+			"name": "Smith, John Peter",
 			"dob": "12/03/1962",
 			"address": "123 Main Street, FLINTSTONE MD, 21532-0000",
 			"race": "White",
@@ -191,7 +192,7 @@ This endpoint retrieves the response for a given request_id
 
 ### HTTP Request
 
-`GET https://f7tw2gz7ij.execute-api.us-east-1.amazonaws.com/prod/v1/records`
+`GET https://api.verifieddataservices.com/v1/records`
 
 ### Query Parameters
 
