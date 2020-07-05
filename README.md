@@ -9,6 +9,7 @@ Building:
 
 Upload the whole build directory to S3: https://s3.console.aws.amazon.com/s3/buckets/verified-data-services/api
 
+The docs folder is what we have currently deployed. Delete it and cp the build folder as docs and then upload that
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/lord/img/master/logo-slate.png" alt="Slate: API Documentation Generator" width="226">
