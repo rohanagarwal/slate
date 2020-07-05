@@ -222,6 +222,9 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#demo" class="toc-h1 toc-link" data-title="Demo">Demo</a>
+          </li>
+          <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
@@ -232,6 +235,9 @@
                   </li>
                   <li>
                     <a href="#poll-county-search-request" class="toc-h2 toc-link" data-title="Poll County Search Request">Poll County Search Request</a>
+                  </li>
+                  <li>
+                    <a href="#callback" class="toc-h2 toc-link" data-title="Callback">Callback</a>
                   </li>
               </ul>
           </li>
@@ -244,15 +250,19 @@
 <p>Welcome to the Verified Data Services (VDS) API! VDS is a modern, RESTful API-driven county criminal screening service. 
 The VDS API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
 in all responses passed back to customers.</p>
+<h1 id='demo'>Demo</h1>
+<p>Feel free to explore our interactive <a href="http://demo.verifieddataservices.com">demo</a> which provides search capabilities 
+for criminal county court records in the state of Maryland.</p>
 <h1 id='authentication'>Authentication</h1>
 <p>We support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> for all HTTP requests.</p>
 
 <p>VDS will provide you with an API key and an API token.</p>
 <h1 id='criminal-record-search-api'>Criminal Record Search API</h1>
-<p>The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests.
-We can also support a callback API if requested.</p>
+<p>The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.</p>
 <h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
-<p>Create a criminal search request.</p>
+<p>Create a criminal county search request by providing the person&#39;s name, date of birth (optional), and county to search in.</p>
+
+<p>We are also adding new capabilities to do custom filtering of the records. We currently support setting a filing date or a disposition date range to filter the records down.</p>
 <pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -262,13 +272,15 @@ We can also support a callback API if requested.</p>
 <span class="n">last_name</span> <span class="o">=</span> <span class="s">"Smith"</span>
 <span class="n">county</span> <span class="o">=</span> <span class="s">"Allegany"</span>
 <span class="n">state</span> <span class="o">=</span> <span class="s">"md"</span>
+<span class="n">filing_date</span> <span class="o">=</span> <span class="mi">7</span> <span class="c"># filter to last 7 years of records based on record filing date</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.verifieddataservices.com/v1/search?"</span> <span class="o">+</span> 
-<span class="s">"firstName={}&amp;middleName={}&amp;lastName={}&amp;county={}&amp;state={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span> 
+<span class="s">"firstName={}&amp;middleName={}&amp;lastName={}&amp;county={}&amp;state={}</span><span class="si">%</span><span class="s">filingDate={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span> 
                                                                    <span class="n">middle_name</span><span class="p">,</span> 
                                                                    <span class="n">last_name</span><span class="p">,</span> 
                                                                    <span class="n">county</span><span class="p">,</span> 
-                                                                   <span class="n">state</span><span class="p">)</span>
+                                                                   <span class="n">state</span><span class="p">,</span>
+                                                                   <span class="n">filing_date</span><span class="p">)</span>
 
 <span class="c"># Make the request</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
@@ -327,6 +339,16 @@ Make sure to replace the API key and API token.
 <td>No</td>
 <td>Date of birth for the person to search</td>
 </tr>
+<tr>
+<td>filingDate</td>
+<td>No</td>
+<td>Specify a number (in years) of records to filter down to. For example, 7 means that records with a filing date in the last 7 years will show up in the filtered section of the JSON response.</td>
+</tr>
+<tr>
+<td>dispositionDate</td>
+<td>No</td>
+<td>Specify a number (in years) of records to filter down to. For example, 7 means that records with a disposition date in the last 7 years will show up in the filtered section of the JSON response.</td>
+</tr>
 </tbody></table>
 <h3 id='response'>Response</h3>
 <table><thead>
@@ -364,7 +386,7 @@ Make sure to replace the API key and API token.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
-<p>Or it returns the full response (in this case, two records were found):</p>
+<p>Or it returns the full response. In this case, two records were found, but there is one record in the filtered_records section because the filing date is within the last 7 years. Both records are in the records section of the JSON. </p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -376,6 +398,43 @@ Make sure to replace the API key and API token.
         </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
         </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"filtered_records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"defendant_information"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith, John Alexander"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w"> 
+                    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Main Street, FLINTSTONE MD, 21530-0000"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"race"</span><span class="p">:</span><span class="w"> </span><span class="s2">"White"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Male"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"eyes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"hair"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"aliases"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"cases"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                    </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2W12334567"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2015"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1420"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nolle Prosequi"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"05/10/2002"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Felony Circuit Court"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1415"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1425"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">}]</span><span class="w">
+            </span><span class="p">}]</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="s2">"records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
         </span><span class="s2">"defendant_information"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -392,6 +451,7 @@ Make sure to replace the API key and API token.
             </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2W12334567"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2015"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
                 </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1420"</span><span class="p">,</span><span class="w">
                 </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nolle Prosequi"</span><span class="p">,</span><span class="w">
@@ -427,6 +487,7 @@ Make sure to replace the API key and API token.
             </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6W98765432"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2010"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
                 </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3-2399"</span><span class="p">,</span><span class="w">
                 </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
@@ -463,6 +524,11 @@ Make sure to replace the API key and API token.
 <p>Each <code>record</code> consists of the defendant information, as well a list of cases for that defendant.</p>
 
 <p>Each <code>case</code> contains the case number, status, and charge-related information.</p>
+<h2 id='callback'>Callback</h2>
+<p>We now support callback API endpoints. Instead of polling the request_id as demonstrated in the previous section, 
+we can directly send you the results of the request to an endpoint of your choosing.</p>
+
+<p>Please work with your Veridata representative to enable this capability.</p>
 
       </div>
       <div class="dark-box">
