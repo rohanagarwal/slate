@@ -1,0 +1,541 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;python&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="python">python</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#demo" class="toc-h1 toc-link" data-title="Demo">Demo</a>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+          </li>
+          <li>
+            <a href="#criminal-record-search-api" class="toc-h1 toc-link" data-title="Criminal Record Search API">Criminal Record Search API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#criminal-county-search-request" class="toc-h2 toc-link" data-title="Criminal County Search Request">Criminal County Search Request</a>
+                  </li>
+                  <li>
+                    <a href="#poll-county-search-request" class="toc-h2 toc-link" data-title="Poll County Search Request">Poll County Search Request</a>
+                  </li>
+                  <li>
+                    <a href="#callback" class="toc-h2 toc-link" data-title="Callback">Callback</a>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to the Verified Data Services (VDS) API! VDS is a modern, RESTful API-driven county criminal screening service. 
+The VDS API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
+in all responses passed back to customers.</p>
+<h1 id='demo'>Demo</h1>
+<p>Feel free to explore our interactive <a href="http://demo.verifieddataservices.com">demo</a> which provides search capabilities 
+for criminal county court records in the state of Maryland.</p>
+<h1 id='authentication'>Authentication</h1>
+<p>We support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> for all HTTP requests.</p>
+
+<p>VDS will provide you with an API key and an API token.</p>
+<h1 id='criminal-record-search-api'>Criminal Record Search API</h1>
+<p>The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.</p>
+<h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
+<p>Create a criminal county search request by providing the person&#39;s name, date of birth (optional), and county to search in.</p>
+
+<p>We are also adding new capabilities to do custom filtering of the records. We currently support setting a filing date or a disposition date range to filter the records down.</p>
+<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c"># Search John Smith in Allegany, Maryland</span>
+<span class="n">first_name</span> <span class="o">=</span> <span class="s">"John"</span>
+<span class="n">middle_name</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">last_name</span> <span class="o">=</span> <span class="s">"Smith"</span>
+<span class="n">county</span> <span class="o">=</span> <span class="s">"Allegany"</span>
+<span class="n">state</span> <span class="o">=</span> <span class="s">"md"</span>
+<span class="n">filing_date</span> <span class="o">=</span> <span class="mi">7</span> <span class="c"># filter to last 7 years of records based on record filing date</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.verifieddataservices.com/v1/search?"</span> <span class="o">+</span> 
+<span class="s">"firstName={}&amp;middleName={}&amp;lastName={}&amp;county={}&amp;state={}</span><span class="si">%</span><span class="s">filingDate={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span> 
+                                                                   <span class="n">middle_name</span><span class="p">,</span> 
+                                                                   <span class="n">last_name</span><span class="p">,</span> 
+                                                                   <span class="n">county</span><span class="p">,</span> 
+                                                                   <span class="n">state</span><span class="p">,</span>
+                                                                   <span class="n">filing_date</span><span class="p">)</span>
+
+<span class="c"># Make the request</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+
+<span class="c"># Get the JSON</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre>
+<aside class="notice">
+Make sure to replace the API key and API token.
+</aside>
+
+<blockquote>
+<p>The above command returns an auto-generated request ID. The JSON is structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='http-request'>HTTP Request</h3>
+<p><code>GET https://api.verifieddataservices.com/v1/search</code></p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>firstName</td>
+<td>Yes</td>
+<td>First name of the person to search</td>
+</tr>
+<tr>
+<td>middleName</td>
+<td>No</td>
+<td>Middle name of the person to search</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>Yes</td>
+<td>Last name of the person to search</td>
+</tr>
+<tr>
+<td>county</td>
+<td>Yes</td>
+<td>County to search the individual in</td>
+</tr>
+<tr>
+<td>state</td>
+<td>Yes</td>
+<td>The corresponding state for the county to search the individual in</td>
+</tr>
+<tr>
+<td>dateOfBirth</td>
+<td>No</td>
+<td>Date of birth for the person to search</td>
+</tr>
+<tr>
+<td>filingDate</td>
+<td>No</td>
+<td>Specify a number (in years) of records to filter down to. For example, 7 means that records with a filing date in the last 7 years will show up in the filtered section of the JSON response.</td>
+</tr>
+<tr>
+<td>dispositionDate</td>
+<td>No</td>
+<td>Specify a number (in years) of records to filter down to. For example, 7 means that records with a disposition date in the last 7 years will show up in the filtered section of the JSON response.</td>
+</tr>
+</tbody></table>
+<h3 id='response'>Response</h3>
+<table><thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>request_id</td>
+<td>Auto-generated, unique request identifier</td>
+</tr>
+</tbody></table>
+<h2 id='poll-county-search-request'>Poll County Search Request</h2>
+<p>Using the request_id, poll VDS to get the results of the request. If VDS has not completed the request, the status of the request is returned.</p>
+<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c"># Get the results for the previous request with request_id: CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM</span>
+<span class="n">request_id</span> <span class="o">=</span> <span class="s">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span>
+
+<span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.verifieddataservices.com/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+
+<span class="c"># Get the JSON</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>The above command either returns the status of the request:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>Or it returns the full response. In this case, two records were found, but there is one record in the filtered_records section because the filing date is within the last 7 years. Both records are in the records section of the JSON. </p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"middleName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"filtered_records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"defendant_information"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith, John Alexander"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w"> 
+                    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Main Street, FLINTSTONE MD, 21530-0000"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"race"</span><span class="p">:</span><span class="w"> </span><span class="s2">"White"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Male"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"eyes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"hair"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"aliases"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"cases"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                    </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2W12334567"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2015"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1420"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nolle Prosequi"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"05/10/2002"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Felony Circuit Court"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1415"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                            </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1425"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+                    </span><span class="p">}]</span><span class="w">
+            </span><span class="p">}]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"defendant_information"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith, John Alexander"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Main Street, FLINTSTONE MD, 21530-0000"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"race"</span><span class="p">:</span><span class="w"> </span><span class="s2">"White"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Male"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"eyes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hair"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"aliases"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"cases"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2W12334567"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2015"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1420"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nolle Prosequi"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"05/10/2002"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Felony Circuit Court"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1415"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-1425"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09/02/2004"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">}]</span><span class="w">
+        </span><span class="p">}]</span><span class="w">
+    </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"defendant_information"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith, John Peter"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12/03/1962"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123 Main Street, FLINTSTONE MD, 21532-0000"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"race"</span><span class="p">:</span><span class="w"> </span><span class="s2">"White"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Male"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"eyes"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"hair"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"aliases"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"cases"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"case_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6W98765432"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"case_status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"filing_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/2010"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"charges"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+                </span><span class="s2">"criminal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3-2399"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stet"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"disposition_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"02/10/1995"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"grade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Misdemeanor"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"charge_description"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">}]</span><span class="w">
+        </span><span class="p">}]</span><span class="w">
+    </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves the response for a given request_id</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET https://api.verifieddataservices.com/v1/records</code></p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>request_id</td>
+<td>Auto-generated, unique request identifier</td>
+</tr>
+</tbody></table>
+<h3 id='response-2'>Response</h3>
+<p>The response contains the results of the county criminal search, if VDS is done processing the request.</p>
+
+<p>The first section of the JSON with key <code>request</code> has the original request details.</p>
+
+<p>The <code>records</code> section is a list of all the criminal court records that we identified based on the request details.</p>
+
+<p>Each <code>record</code> consists of the defendant information, as well a list of cases for that defendant.</p>
+
+<p>Each <code>case</code> contains the case number, status, and charge-related information.</p>
+<h2 id='callback'>Callback</h2>
+<p>We now support callback API endpoints. Instead of polling the request_id as demonstrated in the previous section, 
+we can directly send you the results of the request to an endpoint of your choosing.</p>
+
+<p>Please work with your Veridata representative to enable this capability.</p>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="python">python</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
