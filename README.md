@@ -11,6 +11,68 @@ Upload the whole build directory to S3: https://s3.console.aws.amazon.com/s3/buc
 
 The docs folder is what we have currently deployed. Delete it and cp the build folder as docs and then upload that
 
+Adding back the DEMO stuff
+1. Add 
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"> to the top right after <head>
+
+2. Add the following form in the demo section after the "state of maryland" <p> section
+
+<form class="pure-form-stacked pure-form-aligned" method="GET" target="_blank" action="https://api.verifieddataservices.com/demo/mdrecords">
+    <label><b>First name:</b></label>
+    <input type="text" id="firstName" name="firstName">
+
+    <br>
+
+    <label><b>Middle name:</b></label>
+    <input type="text" id="middleName" name="middleName">
+
+    <br>
+
+    <label><b>Last name:</b></label>
+    <input type="text" id="lastName" name="lastName">
+
+    <br>
+
+    <label><b>Select county:</b></label>
+    <select name="county">
+        <option value="Allegany">Allegany</option>
+        <option value="Armstrong">Anne Arundel</option>
+        <option value="Baltimore">Baltimore</option>
+        <option value="Baltimore City" selected>Baltimore City</option>
+        <option value="Calvert">Calvert</option>
+        <option value="Caroline">Caroline</option>
+        <option value="Carroll">Carroll</option>
+        <option value="Cecil">Cecil</option>
+        <option value="Charles">Charles</option>
+        <option value="Dorchester">Dorchester</option>
+<option value="Frederick">Frederick</option>
+        <option value="Garrett">Garrett</option>
+        <option value="Harford">Harford</option>
+        <option value="Howard">Howard</option>
+        <option value="Kent">Kent</option>
+        <option value="Montgomery">Montgomery</option>
+        <option value="Prince George">Prince George</option>
+        <option value="Queen Anne">Queen Anne</option>
+        <option value="Saint Mary">Saint Mary</option>
+        <option value="Somerset">Somerset</option>
+        <option value="Talbot">Talbot</option>
+        <option value="Washington">Washington</option>
+        <option value="Wicomico">Wicomico</option>
+        <option value="Worcester">Worcester</option>
+    </select>
+    <br>
+    <br>
+    <label><b>Optional: Filter based on filing date - provide a number of years.</b></label>
+    <input type="text" id="filingDate" name="filingDate">
+    <br>
+    <label><b>Optional: Filter based on disposition date - provide a number of years.</b></label>
+    <input type="text" id="dispositionDate" name="dispositionDate">
+    <br>
+    <button class="pure-button" type="submit" id="submit">Search</button>
+</form> 
+
+NORMAL SLATE DOCUMENTATION BELOW THIS
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/lord/img/master/logo-slate.png" alt="Slate: API Documentation Generator" width="226">
   <br>

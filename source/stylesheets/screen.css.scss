@@ -339,6 +339,10 @@ html, body {
     padding-left: $main-padding + 15px;
   }
 
+  &>form {
+    padding-left: $main-padding;
+  }
+
   // the div is the tocify hidden div for placeholding stuff
   &>h1, &>h2, &>div {
     clear:both;
