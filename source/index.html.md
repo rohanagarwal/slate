@@ -9,8 +9,9 @@ search: true
 
 # Introduction
 
-Welcome to the Verified Data Services (VDS) API! VDS is a modern, RESTful API-driven county criminal screening service. 
-The VDS API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
+Welcome to the Veridata API! Veridata is a modern, RESTful API-driven county criminal screening service. 
+
+The Veridata API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
 in all responses passed back to customers.
 
 # Demo
@@ -22,7 +23,7 @@ for criminal county court records in the state of Maryland.
 
 We support [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) for all HTTP requests.
 
-VDS will provide you with an API key and an API token.
+Veridata will provide you with an API key and an API token.
 
 # Criminal Record Search API
 The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.
@@ -96,7 +97,7 @@ Column | Description
 request_id | Auto-generated, unique request identifier
 
 ## Poll County Search Request
-Using the request_id, poll VDS to get the results of the request. If VDS has not completed the request, the status of the request is returned.
+Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.
 
 ```python
 import requests 
@@ -250,7 +251,7 @@ Parameter | Description
 request_id | Auto-generated, unique request identifier
 
 ### Response
-The response contains the results of the county criminal search, if VDS is done processing the request.
+The response contains the results of the county criminal search, if Veridata is done processing the request.
 
 The first section of the JSON with key `request` has the original request details.
 

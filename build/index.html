@@ -248,8 +248,9 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Verified Data Services (VDS) API! VDS is a modern, RESTful API-driven county criminal screening service. 
-The VDS API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
+<p>Welcome to the Veridata API! Veridata is a modern, RESTful API-driven county criminal screening service. </p>
+
+<p>The Veridata API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
 in all responses passed back to customers.</p>
 <h1 id='demo'>Demo</h1>
 <p>Feel free to explore our interactive <a href="http://demo.verifieddataservices.com">demo</a> which provides search capabilities 
@@ -281,7 +282,7 @@ for criminal county court records in the state of Maryland.</p>
         <option value="Caroline">Caroline</option>
         <option value="Carroll">Carroll</option>
         <option value="Cecil">Cecil</option>
-        <option value="Charles">Charles</option>
+<option value="Charles">Charles</option>
         <option value="Dorchester">Dorchester</option>
 <option value="Frederick">Frederick</option>
         <option value="Garrett">Garrett</option>
@@ -298,26 +299,20 @@ for criminal county court records in the state of Maryland.</p>
         <option value="Wicomico">Wicomico</option>
         <option value="Worcester">Worcester</option>
     </select>
-
     <br>
     <br>
-
     <label><b>Optional: Filter based on filing date - provide a number of years.</b></label>
     <input type="text" id="filingDate" name="filingDate">
-
     <br>
-
     <label><b>Optional: Filter based on disposition date - provide a number of years.</b></label>
     <input type="text" id="dispositionDate" name="dispositionDate">
-
     <br>
-
     <button class="pure-button" type="submit" id="submit">Search</button>
 </form>
 <h1 id='authentication'>Authentication</h1>
 <p>We support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> for all HTTP requests.</p>
 
-<p>VDS will provide you with an API key and an API token.</p>
+<p>Veridata will provide you with an API key and an API token.</p>
 <h1 id='criminal-record-search-api'>Criminal Record Search API</h1>
 <p>The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.</p>
 <h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
@@ -424,7 +419,7 @@ Make sure to replace the API key and API token.
 </tr>
 </tbody></table>
 <h2 id='poll-county-search-request'>Poll County Search Request</h2>
-<p>Using the request_id, poll VDS to get the results of the request. If VDS has not completed the request, the status of the request is returned.</p>
+<p>Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.</p>
 <pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -576,7 +571,7 @@ Make sure to replace the API key and API token.
 </tr>
 </tbody></table>
 <h3 id='response-2'>Response</h3>
-<p>The response contains the results of the county criminal search, if VDS is done processing the request.</p>
+<p>The response contains the results of the county criminal search, if Veridata is done processing the request.</p>
 
 <p>The first section of the JSON with key <code>request</code> has the original request details.</p>
 
