@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
   <head>
-<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous"> 
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -229,24 +229,29 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
-            <a href="#record-search-api" class="toc-h1 toc-link" data-title="Record Search API">Record Search API</a>
+            <a href="#nsopw-search-api" class="toc-h1 toc-link" data-title="NSOPW Search API">NSOPW Search API</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#nsopw-national-sex-offender-public-website" class="toc-h2 toc-link" data-title="(NSOPW) National Sex Offender Public Website">(NSOPW) National Sex Offender Public Website</a>
+                    <a href="#nsopw-search-request" class="toc-h2 toc-link" data-title="NSOPW Search Request">NSOPW Search Request</a>
                   </li>
                   <li>
                     <a href="#poll-nsopw-request" class="toc-h2 toc-link" data-title="Poll NSOPW Request">Poll NSOPW Request</a>
                   </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#criminal-county-search-api" class="toc-h1 toc-link" data-title="Criminal County Search API">Criminal County Search API</a>
+              <ul class="toc-list-h2">
                   <li>
                     <a href="#criminal-county-search-request" class="toc-h2 toc-link" data-title="Criminal County Search Request">Criminal County Search Request</a>
                   </li>
                   <li>
                     <a href="#poll-criminal-county-request" class="toc-h2 toc-link" data-title="Poll Criminal County Request">Poll Criminal County Request</a>
                   </li>
-                  <li>
-                    <a href="#callback" class="toc-h2 toc-link" data-title="Callback">Callback</a>
-                  </li>
               </ul>
+          </li>
+          <li>
+            <a href="#callback" class="toc-h1 toc-link" data-title="Callback">Callback</a>
           </li>
       </ul>
     </div>
@@ -262,7 +267,7 @@ in all responses passed back to customers.</p>
 <h1 id='demo'>Demo</h1>
 <p>Feel free to explore this interactive demo which provides search capabilities for criminal county court records in the state of Maryland. This demo purposely limits results to 20 records.</p>
 
-<form class="pure-form-stacked pure-form-aligned" method="GET" target="_blank" action="https://api.verifieddataservices.com/demo/mdrecords">
+<form class="pure-form-stacked pure-form-aligned" method="GET" target="_blank" action="https://api.veridata.io/demo/mdrecords">
     <label><b>First name:</b></label>
     <input type="text" id="firstName" name="firstName">
 
@@ -316,16 +321,13 @@ in all responses passed back to customers.</p>
     <button class="pure-button" type="submit" id="submit">Search</button>
 </form> 
 
+
 <h1 id='authentication'>Authentication</h1>
 <p>We support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> for all HTTP requests.</p>
 
 <p>Veridata will provide you with an API key and an API token.</p>
-<h1 id='record-search-api'>Record Search API</h1>
-<p>The Record Search API provides a set of APIs to initiate NSOPW search requests, County Criminal search requests, and 
-poll for the results of the requests. We also support callback requests where we send the results of your search request 
-to your API endpoint.</p>
-<h2 id='nsopw-national-sex-offender-public-website'>(NSOPW) National Sex Offender Public Website</h2>
-<p>Create a NSOPW search request by providing the first name, last name, and date of birth.</p>
+<h1 id='nsopw-search-api'>NSOPW Search API</h1><h2 id='nsopw-search-request'>NSOPW Search Request</h2>
+<p>Create a NSOPW (National Sex Offender Public Website) search request by providing the first name, last name, and date of birth.</p>
 <pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -475,7 +477,7 @@ Make sure to replace the API key and API token.
 <p>The first section of the JSON with key <code>request</code> has the original request details.</p>
 
 <p>The <code>records</code> section is a list of all the sex offender records that we identified based on the request details.</p>
-<h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
+<h1 id='criminal-county-search-api'>Criminal County Search API</h1><h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
 <p>Create a criminal county search request by providing the person&#39;s name, date of birth (optional), and county to search in.</p>
 
 <p>We are also adding new capabilities to do custom filtering of the records. We currently support setting a filing date or a disposition date range to filter the records down.</p>
@@ -765,7 +767,7 @@ Make sure to replace the API key and API token.
 <p>Each <code>record</code> consists of the defendant information, as well a list of cases for that defendant.</p>
 
 <p>Each <code>case</code> contains the case number, status, and charge-related information.</p>
-<h2 id='callback'>Callback</h2>
+<h1 id='callback'>Callback</h1>
 <p>We now support callback API endpoints. Instead of polling the request_id as demonstrated in the previous section, 
 we can directly send you the results of the request to an endpoint of your choosing.</p>
 

@@ -25,13 +25,10 @@ We support [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_acces
 
 Veridata will provide you with an API key and an API token.
 
-# Record Search API
-The Record Search API provides a set of APIs to initiate NSOPW search requests, County Criminal search requests, and 
-poll for the results of the requests. We also support callback requests where we send the results of your search request 
-to your API endpoint.
+# NSOPW Search API
 
-## (NSOPW) National Sex Offender Public Website
-Create a NSOPW search request by providing the first name, last name, and date of birth.
+## NSOPW Search Request
+Create a NSOPW (National Sex Offender Public Website) search request by providing the first name, last name, and date of birth.
 
 ```python
 import requests 
@@ -165,6 +162,8 @@ The response contains the results of the NSOPW search, if Veridata is done proce
 The first section of the JSON with key `request` has the original request details.
 
 The `records` section is a list of all the sex offender records that we identified based on the request details.
+
+# Criminal County Search API
 
 ## Criminal County Search Request
 Create a criminal county search request by providing the person's name, date of birth (optional), and county to search in.
@@ -422,7 +421,7 @@ Each `record` consists of the defendant information, as well a list of cases for
 
 Each `case` contains the case number, status, and charge-related information.
 
-## Callback 
+# Callback 
 We now support callback API endpoints. Instead of polling the request_id as demonstrated in the previous section, 
 we can directly send you the results of the request to an endpoint of your choosing.
 
