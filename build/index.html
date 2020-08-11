@@ -2,7 +2,6 @@
 <!doctype html>
 <html>
   <head>
-<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -229,13 +228,19 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
-            <a href="#criminal-record-search-api" class="toc-h1 toc-link" data-title="Criminal Record Search API">Criminal Record Search API</a>
+            <a href="#record-search-api" class="toc-h1 toc-link" data-title="Record Search API">Record Search API</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#nsopw-national-sex-offender-public-website" class="toc-h2 toc-link" data-title="(NSOPW) National Sex Offender Public Website">(NSOPW) National Sex Offender Public Website</a>
+                  </li>
+                  <li>
+                    <a href="#poll-nsopw-request" class="toc-h2 toc-link" data-title="Poll NSOPW Request">Poll NSOPW Request</a>
+                  </li>
                   <li>
                     <a href="#criminal-county-search-request" class="toc-h2 toc-link" data-title="Criminal County Search Request">Criminal County Search Request</a>
                   </li>
                   <li>
-                    <a href="#poll-county-search-request" class="toc-h2 toc-link" data-title="Poll County Search Request">Poll County Search Request</a>
+                    <a href="#poll-criminal-county-request" class="toc-h2 toc-link" data-title="Poll Criminal County Request">Poll Criminal County Request</a>
                   </li>
                   <li>
                     <a href="#callback" class="toc-h2 toc-link" data-title="Callback">Callback</a>
@@ -248,73 +253,172 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Veridata API! Veridata is a modern, RESTful API-driven county criminal screening service. </p>
+<p>Welcome to the Veridata API! Veridata is a modern, RESTful API-driven criminal record screening service. Veridata supports
+searching NSOPW, the National Sex Offender Public Website, as well as various jurisdictions for county criminal records.</p>
 
 <p>The Veridata API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
 in all responses passed back to customers.</p>
 <h1 id='demo'>Demo</h1>
-<p>Feel free to explore our interactive <a href="http://demo.verifieddataservices.com">demo</a> which provides search capabilities 
-for criminal county court records in the state of Maryland.</p>
-
-<form class="pure-form-stacked pure-form-aligned" method="GET" target="_blank" action="https://api.verifieddataservices.com/demo/mdrecords">
-    <label><b>First name:</b></label>
-    <input type="text" id="firstName" name="firstName">
-
-    <br>
-
-    <label><b>Middle name:</b></label>
-    <input type="text" id="middleName" name="middleName">
-
-    <br>
-
-    <label><b>Last name:</b></label>
-    <input type="text" id="lastName" name="lastName">
-
-    <br>
-
-    <label><b>Select county:</b></label>
-    <select name="county">
-        <option value="Allegany">Allegany</option>
-        <option value="Armstrong">Anne Arundel</option>
-        <option value="Baltimore">Baltimore</option>
-        <option value="Baltimore City" selected>Baltimore City</option>
-        <option value="Calvert">Calvert</option>
-        <option value="Caroline">Caroline</option>
-        <option value="Carroll">Carroll</option>
-        <option value="Cecil">Cecil</option>
-<option value="Charles">Charles</option>
-        <option value="Dorchester">Dorchester</option>
-<option value="Frederick">Frederick</option>
-        <option value="Garrett">Garrett</option>
-        <option value="Harford">Harford</option>
-        <option value="Howard">Howard</option>
-        <option value="Kent">Kent</option>
-        <option value="Montgomery">Montgomery</option>
-        <option value="Prince George">Prince George</option>
-        <option value="Queen Anne">Queen Anne</option>
-        <option value="Saint Mary">Saint Mary</option>
-        <option value="Somerset">Somerset</option>
-        <option value="Talbot">Talbot</option>
-        <option value="Washington">Washington</option>
-        <option value="Wicomico">Wicomico</option>
-        <option value="Worcester">Worcester</option>
-    </select>
-    <br>
-    <br>
-    <label><b>Optional: Filter based on filing date - provide a number of years.</b></label>
-    <input type="text" id="filingDate" name="filingDate">
-    <br>
-    <label><b>Optional: Filter based on disposition date - provide a number of years.</b></label>
-    <input type="text" id="dispositionDate" name="dispositionDate">
-    <br>
-    <button class="pure-button" type="submit" id="submit">Search</button>
-</form>
+<p>Feel free to explore this interactive demo which provides search capabilities for criminal county court records in the state of Maryland. This demo purposely limits results to 20 records.</p>
 <h1 id='authentication'>Authentication</h1>
 <p>We support <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Authentication</a> for all HTTP requests.</p>
 
 <p>Veridata will provide you with an API key and an API token.</p>
-<h1 id='criminal-record-search-api'>Criminal Record Search API</h1>
-<p>The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.</p>
+<h1 id='record-search-api'>Record Search API</h1>
+<p>The Record Search API provides a set of APIs to initiate NSOPW search requests, County Criminal search requests, and 
+poll for the results of the requests. We also support callback requests where we send the results of your search request 
+to your API endpoint.</p>
+<h2 id='nsopw-national-sex-offender-public-website'>(NSOPW) National Sex Offender Public Website</h2>
+<p>Create a NSOPW search request by providing the first name, last name, and date of birth.</p>
+<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c"># Search John Smith with DOB 01/01/1970</span>
+<span class="n">search_type</span> <span class="o">=</span> <span class="s">"nsopw"</span>
+<span class="n">first_name</span> <span class="o">=</span> <span class="s">"John"</span>
+<span class="n">last_name</span> <span class="o">=</span> <span class="s">"Smith"</span>
+<span class="n">dob</span> <span class="o">=</span> <span class="s">"01/01/1970"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/search?searchType={}&amp;"</span> <span class="o">+</span> 
+<span class="s">"firstName={}&amp;lastName={}&amp;dob={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">searchType</span><span class="p">,</span> 
+                                         <span class="n">first_name</span>
+                                         <span class="n">last_name</span><span class="p">,</span> 
+                                         <span class="n">dob</span><span class="p">)</span>
+
+<span class="c"># Make the request</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+
+<span class="c"># Get the JSON</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre>
+<aside class="notice">
+Make sure to replace the API key and API token.
+</aside>
+
+<blockquote>
+<p>The above command returns an auto-generated request ID. The JSON is structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='http-request'>HTTP Request</h3>
+<p><code>GET https://api.veridata.io/v1/search</code></p>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>searchType</td>
+<td>Yes</td>
+<td>Should be set to &quot;nsopw&quot;</td>
+</tr>
+<tr>
+<td>firstName</td>
+<td>Yes</td>
+<td>First name of the person to search</td>
+</tr>
+<tr>
+<td>lastName</td>
+<td>Yes</td>
+<td>Last name of the person to search</td>
+</tr>
+<tr>
+<td>dob</td>
+<td>Yes</td>
+<td>Date of birth for the person to search</td>
+</tr>
+</tbody></table>
+<h3 id='response'>Response</h3>
+<table><thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>request_id</td>
+<td>Auto-generated, unique request identifier</td>
+</tr>
+</tbody></table>
+
+<p>See the Poll API below for details on fetching the response for the given request_id.</p>
+<h2 id='poll-nsopw-request'>Poll NSOPW Request</h2>
+<p>Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.</p>
+<pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c"># Get the results for the previous county criminal request with request_id: 20200604X4IWOOFM</span>
+<span class="n">request_id</span> <span class="o">=</span> <span class="s">"20200604X4IWOOFM"</span>
+
+<span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+
+<span class="c"># Get the JSON</span>
+<span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>The above command returns status &quot;processing&quot; if the request is not complete:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>If the request is complete, it returns the full response. In this case, one sex offender record match was found. </p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"link"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&amp;x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b"</span><span class="w"> 
+    </span><span class="p">}]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>If the request was unable to be processed in the Veridata system, the following is returned:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"failed_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-04 05:05:54"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"note"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Please retry the request or contact your Veridata representative"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET https://api.veridata.io/v1/records</code></p>
+<h3 id='query-parameters-2'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>request_id</td>
+<td>Auto-generated, unique request identifier</td>
+</tr>
+</tbody></table>
+<h3 id='response-2'>Response</h3>
+<p>The response contains the results of the NSOPW search, if Veridata is done processing the request.</p>
+
+<p>The first section of the JSON with key <code>request</code> has the original request details.</p>
+
+<p>The <code>records</code> section is a list of all the sex offender records that we identified based on the request details.</p>
 <h2 id='criminal-county-search-request'>Criminal County Search Request</h2>
 <p>Create a criminal county search request by providing the person&#39;s name, date of birth (optional), and county to search in.</p>
 
@@ -323,6 +427,7 @@ for criminal county court records in the state of Maryland.</p>
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="c"># Search John Smith in Allegany, Maryland</span>
+<span class="n">search_type</span> <span class="o">=</span> <span class="s">"countycriminal"</span>
 <span class="n">first_name</span> <span class="o">=</span> <span class="s">"John"</span>
 <span class="n">middle_name</span> <span class="o">=</span> <span class="s">""</span>
 <span class="n">last_name</span> <span class="o">=</span> <span class="s">"Smith"</span>
@@ -330,8 +435,9 @@ for criminal county court records in the state of Maryland.</p>
 <span class="n">state</span> <span class="o">=</span> <span class="s">"md"</span>
 <span class="n">filing_date</span> <span class="o">=</span> <span class="mi">7</span> <span class="c"># filter to last 7 years of records based on record filing date</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.verifieddataservices.com/v1/search?"</span> <span class="o">+</span> 
-<span class="s">"firstName={}&amp;middleName={}&amp;lastName={}&amp;county={}&amp;state={}</span><span class="si">%</span><span class="s">filingDate={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_name</span><span class="p">,</span> 
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/search?searchType={}&amp;"</span> <span class="o">+</span> 
+<span class="s">"firstName={}&amp;middleName={}&amp;lastName={}&amp;county={}&amp;state={}</span><span class="si">%</span><span class="s">filingDate={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">search_type</span><span class="p">,</span>
+                                                                   <span class="n">first_name</span><span class="p">,</span> 
                                                                    <span class="n">middle_name</span><span class="p">,</span> 
                                                                    <span class="n">last_name</span><span class="p">,</span> 
                                                                    <span class="n">county</span><span class="p">,</span> 
@@ -353,11 +459,11 @@ Make sure to replace the API key and API token.
 <p>The above command returns an auto-generated request ID. The JSON is structured like this:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span><span class="w">
+  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://api.verifieddataservices.com/v1/search</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+</span></code></pre><h3 id='http-request-3'>HTTP Request</h3>
+<p><code>GET https://api.veridata.io/v1/search</code></p>
+<h3 id='query-parameters-3'>Query Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -365,6 +471,11 @@ Make sure to replace the API key and API token.
 <th>Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>searchType</td>
+<td>Yes</td>
+<td>Should be set to &quot;countycriminal&quot;</td>
+</tr>
 <tr>
 <td>firstName</td>
 <td>Yes</td>
@@ -406,7 +517,7 @@ Make sure to replace the API key and API token.
 <td>Specify a number (in years) of records to filter down to. For example, 7 means that records with a disposition date in the last 7 years will show up in the filtered section of the JSON response.</td>
 </tr>
 </tbody></table>
-<h3 id='response'>Response</h3>
+<h3 id='response-3'>Response</h3>
 <table><thead>
 <tr>
 <th>Column</th>
@@ -418,15 +529,17 @@ Make sure to replace the API key and API token.
 <td>Auto-generated, unique request identifier</td>
 </tr>
 </tbody></table>
-<h2 id='poll-county-search-request'>Poll County Search Request</h2>
+
+<p>See the Poll API below for details on fetching the response for the given request_id.</p>
+<h2 id='poll-criminal-county-request'>Poll Criminal County Request</h2>
 <p>Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.</p>
 <pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span> 
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="c"># Get the results for the previous request with request_id: CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM</span>
-<span class="n">request_id</span> <span class="o">=</span> <span class="s">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span>
+<span class="c"># Get the results for the previous county criminal request with request_id: 20200611QPB1BE11</span>
+<span class="n">request_id</span> <span class="o">=</span> <span class="s">"20200611QPB1BE11"</span>
 
-<span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.verifieddataservices.com/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
+<span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
 
@@ -435,18 +548,19 @@ Make sure to replace the API key and API token.
 <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
 </code></pre>
 <blockquote>
-<p>The above command either returns the status of the request:</p>
+<p>The above command returns status &quot;processing&quot; if the request is not complete:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
-<p>Or it returns the full response. In this case, two records were found, but there is one record in the filtered_records section because the filing date is within the last 7 years. Both records are in the records section of the JSON. </p>
+<p>If the request is complete, it returns the full response. In this case, one sex offender record match was found. </p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"middleName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
         </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
@@ -555,10 +669,25 @@ Make sure to replace the API key and API token.
     </span><span class="p">}]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves the response for a given request_id</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET https://api.verifieddataservices.com/v1/records</code></p>
-<h3 id='query-parameters-2'>Query Parameters</h3>
+<blockquote>
+<p>If the request was unable to be processed in the Veridata system, the following is returned:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"middleName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MD"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"failed_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-11 03:05:23"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"note"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Please retry the request or contact your Veridata representative"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='http-request-4'>HTTP Request</h3>
+<p><code>GET https://api.veridata.io/v1/records</code></p>
+<h3 id='query-parameters-4'>Query Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -570,7 +699,7 @@ Make sure to replace the API key and API token.
 <td>Auto-generated, unique request identifier</td>
 </tr>
 </tbody></table>
-<h3 id='response-2'>Response</h3>
+<h3 id='response-4'>Response</h3>
 <p>The response contains the results of the county criminal search, if Veridata is done processing the request.</p>
 
 <p>The first section of the JSON with key <code>request</code> has the original request details.</p>

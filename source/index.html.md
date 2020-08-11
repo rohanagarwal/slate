@@ -9,15 +9,15 @@ search: true
 
 # Introduction
 
-Welcome to the Veridata API! Veridata is a modern, RESTful API-driven county criminal screening service. 
+Welcome to the Veridata API! Veridata is a modern, RESTful API-driven criminal record screening service. Veridata supports
+searching NSOPW, the National Sex Offender Public Website, as well as various jurisdictions for county criminal records.
 
 The Veridata API uses resource-oriented URLs, supports authentication and HTTPS verbs, and leverages JSON 
 in all responses passed back to customers.
 
 # Demo
 
-Feel free to explore our interactive [demo](http://demo.verifieddataservices.com) which provides search capabilities 
-for criminal county court records in the state of Maryland.
+Feel free to explore this interactive demo which provides search capabilities for criminal county court records in the state of Maryland. This demo purposely limits results to 20 records.
                                            
 # Authentication
 
@@ -25,8 +25,146 @@ We support [HTTP Basic Authentication](https://en.wikipedia.org/wiki/Basic_acces
 
 Veridata will provide you with an API key and an API token.
 
-# Criminal Record Search API
-The Criminal Record Search API provides a set of APIs to create county search requests as well as poll for the results of the requests. We also support callback requests where we send the results of your search request to your API endpoint.
+# Record Search API
+The Record Search API provides a set of APIs to initiate NSOPW search requests, County Criminal search requests, and 
+poll for the results of the requests. We also support callback requests where we send the results of your search request 
+to your API endpoint.
+
+## (NSOPW) National Sex Offender Public Website
+Create a NSOPW search request by providing the first name, last name, and date of birth.
+
+```python
+import requests 
+import json
+
+# Search John Smith with DOB 01/01/1970
+search_type = "nsopw"
+first_name = "John"
+last_name = "Smith"
+dob = "01/01/1970"
+url = "https://api.veridata.io/v1/search?searchType={}&" + 
+"firstName={}&lastName={}&dob={}".format(searchType, 
+                                         first_name
+                                         last_name, 
+                                         dob)
+
+# Make the request
+response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
+
+# Get the JSON
+contents = response.text
+result = json.loads(contents)
+```
+
+<aside class="notice">
+Make sure to replace the API key and API token.
+</aside>
+
+> The above command returns an auto-generated request ID. The JSON is structured like this:
+
+```json
+{
+  "request_id": "20200604X4IWOOFM"
+}
+```
+
+### HTTP Request
+
+`GET https://api.veridata.io/v1/search`
+
+### Query Parameters
+
+Parameter | Required | Description
+--------- | ------- | -----------
+searchType | Yes | Should be set to "nsopw"
+firstName | Yes | First name of the person to search
+lastName | Yes | Last name of the person to search
+dob | Yes |  Date of birth for the person to search
+
+### Response
+
+Column | Description
+--------- | -------
+request_id | Auto-generated, unique request identifier
+
+See the Poll API below for details on fetching the response for the given request_id.
+
+## Poll NSOPW Request
+Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.
+
+```python
+import requests 
+import json
+
+# Get the results for the previous county criminal request with request_id: 20200604X4IWOOFM
+request_id = "20200604X4IWOOFM"
+
+poll_url = "https://api.veridata.io/v1/records?request_id={}".format(request_id)
+
+response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
+
+# Get the JSON
+contents = response.text
+result = json.loads(contents)
+```
+
+> The above command returns status "processing" if the request is not complete:
+
+```json
+{
+  "request_id": "20200604X4IWOOFM",
+  "status": "processing"
+}
+```
+
+> If the request is complete, it returns the full response. In this case, one sex offender record match was found. 
+
+```json
+{
+	"request": {
+		"request_id": "20200604X4IWOOFM",
+		"firstName": "John",
+		"lastName": "Smith",
+		"dob": "01/01/1970"
+	},
+    "records": [{
+		"name": "John Smith",
+		"dob": "01/01/1970",
+        "link": "https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b" 
+    }]
+}
+```
+
+> If the request was unable to be processed in the Veridata system, the following is returned:
+
+```json
+{
+	"request_id": "20200604X4IWOOFM",
+	"firstName": "John",
+	"lastName": "Smith",
+	"dob": "01/01/1970",
+	"failed_timestamp": "2020-06-04 05:05:54",
+	"status": "failed",
+	"note": "Please retry the request or contact your Veridata representative"
+}
+```
+
+### HTTP Request
+
+`GET https://api.veridata.io/v1/records`
+
+### Query Parameters
+
+Parameter | Description
+--------- | -----------
+request_id | Auto-generated, unique request identifier
+
+### Response
+The response contains the results of the NSOPW search, if Veridata is done processing the request.
+
+The first section of the JSON with key `request` has the original request details.
+
+The `records` section is a list of all the sex offender records that we identified based on the request details.
 
 ## Criminal County Search Request
 Create a criminal county search request by providing the person's name, date of birth (optional), and county to search in.
@@ -38,6 +176,7 @@ import requests
 import json
 
 # Search John Smith in Allegany, Maryland
+search_type = "countycriminal"
 first_name = "John"
 middle_name = ""
 last_name = "Smith"
@@ -45,8 +184,9 @@ county = "Allegany"
 state = "md"
 filing_date = 7 # filter to last 7 years of records based on record filing date
 
-url = "https://api.verifieddataservices.com/v1/search?" + 
-"firstName={}&middleName={}&lastName={}&county={}&state={}%filingDate={}".format(first_name, 
+url = "https://api.veridata.io/v1/search?searchType={}&" + 
+"firstName={}&middleName={}&lastName={}&county={}&state={}%filingDate={}".format(search_type,
+                                                                   first_name, 
                                                                    middle_name, 
                                                                    last_name, 
                                                                    county, 
@@ -69,18 +209,19 @@ Make sure to replace the API key and API token.
 
 ```json
 {
-  "request_id": "CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"
+  "request_id": "20200611QPB1BE11"
 }
 ```
 
 ### HTTP Request
 
-`GET https://api.verifieddataservices.com/v1/search`
+`GET https://api.veridata.io/v1/search`
 
 ### Query Parameters
 
 Parameter | Required | Description
 --------- | ------- | -----------
+searchType | Yes | Should be set to "countycriminal"
 firstName | Yes | First name of the person to search
 middleName | No | Middle name of the person to search
 lastName | Yes | Last name of the person to search
@@ -96,17 +237,19 @@ Column | Description
 --------- | -------
 request_id | Auto-generated, unique request identifier
 
-## Poll County Search Request
+See the Poll API below for details on fetching the response for the given request_id.
+
+## Poll Criminal County Request
 Using the request_id, poll Veridata to get the results of the request. If Veridata has not completed the request, the status of the request is returned.
 
 ```python
 import requests 
 import json
 
-# Get the results for the previous request with request_id: CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM
-request_id = "CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM"
+# Get the results for the previous county criminal request with request_id: 20200611QPB1BE11
+request_id = "20200611QPB1BE11"
 
-poll_url = "https://api.verifieddataservices.com/v1/records?request_id={}".format(request_id)
+poll_url = "https://api.veridata.io/v1/records?request_id={}".format(request_id)
 
 response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
 
@@ -115,20 +258,21 @@ contents = response.text
 result = json.loads(contents)
 ```
 
-> The above command either returns the status of the request:
+> The above command returns status "processing" if the request is not complete:
 
 ```json
 {
+  "request_id": "20200611QPB1BE11",
   "status": "processing"
 }
 ```
 
-> Or it returns the full response. In this case, two records were found, but there is one record in the filtered_records section because the filing date is within the last 7 years. Both records are in the records section of the JSON. 
+> If the request is complete, it returns the full response. In this case, one sex offender record match was found. 
 
 ```json
 {
 	"request": {
-		"request_id": "CRZM78AUSI6W9BZ6E9K10QSYQYARW5SM",
+		"request_id": "20200611QPB1BE11",
 		"firstName": "John",
 		"middleName": null,
 		"lastName": "Smith",
@@ -238,11 +382,28 @@ result = json.loads(contents)
 }
 ```
 
-This endpoint retrieves the response for a given request_id
+> If the request was unable to be processed in the Veridata system, the following is returned:
+
+```json
+{
+	"request_id": "20200611QPB1BE11",
+    "firstName": "John",
+    "middleName": null,
+    "lastName": "Smith",
+    "address": null,
+    "dob": null,
+    "county": "Allegany",
+    "state": "MD",
+	"failed_timestamp": "2020-06-11 03:05:23",
+	"status": "failed",
+	"note": "Please retry the request or contact your Veridata representative"
+}
+```
+
 
 ### HTTP Request
 
-`GET https://api.verifieddataservices.com/v1/records`
+`GET https://api.veridata.io/v1/records`
 
 ### Query Parameters
 
