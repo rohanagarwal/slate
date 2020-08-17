@@ -279,11 +279,7 @@ in all responses passed back to customers.</p>
 <span class="n">first_name</span> <span class="o">=</span> <span class="s">"John"</span>
 <span class="n">last_name</span> <span class="o">=</span> <span class="s">"Smith"</span>
 <span class="n">dob</span> <span class="o">=</span> <span class="s">"01/01/1970"</span>
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/search?searchType={}&amp;"</span> <span class="o">+</span> 
-<span class="s">"firstName={}&amp;lastName={}&amp;dob={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">searchType</span><span class="p">,</span> 
-                                         <span class="n">first_name</span>
-                                         <span class="n">last_name</span><span class="p">,</span> 
-                                         <span class="n">dob</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/search?searchType={}&amp;firstName={}&amp;lastName={}&amp;dob={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">search_type</span><span class="p">,</span> <span class="n">first_name</span><span class="p">,</span> <span class="n">last_name</span><span class="p">,</span> <span class="n">dob</span><span class="p">)</span>
 
 <span class="c"># Make the request</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
@@ -357,7 +353,7 @@ Make sure to replace the API key and API token.
 
 <span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">poll_url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
 
 <span class="c"># Get the JSON</span>
 <span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
@@ -367,12 +363,16 @@ Make sure to replace the API key and API token.
 <p>The above command returns status &quot;processing&quot; if the request is not complete:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
-<p>If the request is complete, it returns the full response. In this case, one sex offender record match was found. </p>
+<p>If the request is complete, it returns the full response. In this case, one sex offender record match was found. 
+Note the age section will either type &quot;yearOfBirth&quot;, &quot;dateOfBirth&quot;, or &quot;age&quot; depending on the record,
+since some jurisdictions report the defendant&#39;s age differently.</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -382,20 +382,26 @@ Make sure to replace the API key and API token.
         </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="s2">"records"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
-        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Smith"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"link"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&amp;x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b"</span><span class="w"> 
-    </span><span class="p">}]</span><span class="w">
+        </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith, John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"age"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dateOfBirth"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"link"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&amp;x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b"</span><span class="w">
+    </span><span class="p">}],</span><span class="w">
+    </span><span class="s2">"offlineJurisdictions"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
 <p>If the request was unable to be processed in the Veridata system, the following is returned:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200604X4IWOOFM"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="s2">"01/01/1970"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
     </span><span class="s2">"failed_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-04 05:05:54"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"note"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Please retry the request or contact your Veridata representative"</span><span class="w">
@@ -542,7 +548,7 @@ Make sure to replace the API key and API token.
 
 <span class="n">poll_url</span> <span class="o">=</span> <span class="s">"https://api.veridata.io/v1/records?request_id={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request_id</span><span class="p">)</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">poll_url</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="s">'&lt;INSERT API_KEY&gt;'</span><span class="p">,</span> <span class="s">'&lt;INSERT API_TOKEN&gt;'</span><span class="p">))</span>
 
 <span class="c"># Get the JSON</span>
 <span class="n">contents</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
@@ -552,7 +558,9 @@ Make sure to replace the API key and API token.
 <p>The above command returns status &quot;processing&quot; if the request is not complete:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"request"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -674,14 +682,16 @@ Make sure to replace the API key and API token.
 <p>If the request was unable to be processed in the Veridata system, the following is returned:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"middleName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MD"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"requests"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"request_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20200611QPB1BE11"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"firstName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"middleName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"dob"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allegany"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MD"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
     </span><span class="s2">"failed_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-06-11 03:05:23"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"failed"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"note"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Please retry the request or contact your Veridata representative"</span><span class="w">

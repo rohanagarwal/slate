@@ -39,11 +39,7 @@ search_type = "nsopw"
 first_name = "John"
 last_name = "Smith"
 dob = "01/01/1970"
-url = "https://api.veridata.io/v1/search?searchType={}&" + 
-"firstName={}&lastName={}&dob={}".format(searchType, 
-                                         first_name
-                                         last_name, 
-                                         dob)
+url = "https://api.veridata.io/v1/search?searchType={}&firstName={}&lastName={}&dob={}".format(search_type, first_name, last_name, dob)
 
 # Make the request
 response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
@@ -98,7 +94,7 @@ request_id = "20200604X4IWOOFM"
 
 poll_url = "https://api.veridata.io/v1/records?request_id={}".format(request_id)
 
-response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
+response = requests.get(poll_url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
 
 # Get the JSON
 contents = response.text
@@ -109,12 +105,16 @@ result = json.loads(contents)
 
 ```json
 {
-  "request_id": "20200604X4IWOOFM",
+  "request": {
+    "request_id": "20200604X4IWOOFM"
+  },
   "status": "processing"
 }
 ```
 
 > If the request is complete, it returns the full response. In this case, one sex offender record match was found. 
+> Note the age section will either type "yearOfBirth", "dateOfBirth", or "age" depending on the record,
+> since some jurisdictions report the defendant's age differently.
 
 ```json
 {
@@ -124,11 +124,15 @@ result = json.loads(contents)
 		"lastName": "Smith",
 		"dob": "01/01/1970"
 	},
-    "records": [{
-		"name": "John Smith",
-		"dob": "01/01/1970",
-        "link": "https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b" 
-    }]
+	"records": [{
+		"name": "Smith, John",
+		"age": {
+			"type": "dateOfBirth",
+			"value": "01/01/1970"
+		},
+		"link": "https://www.mshp.dps.missouri.gov/CJ38/OffenderDetails?id=jk234n&x=32jk4-cd01-4ed4-234kj-6f3ef3eff324b"
+	}],
+	"offlineJurisdictions": null
 }
 ```
 
@@ -136,10 +140,12 @@ result = json.loads(contents)
 
 ```json
 {
-	"request_id": "20200604X4IWOOFM",
-	"firstName": "John",
-	"lastName": "Smith",
-	"dob": "01/01/1970",
+    "request": {
+        "request_id": "20200604X4IWOOFM",
+        "firstName": "John",
+        "lastName": "Smith",
+        "dob": "01/01/1970"
+    },
 	"failed_timestamp": "2020-06-04 05:05:54",
 	"status": "failed",
 	"note": "Please retry the request or contact your Veridata representative"
@@ -250,7 +256,7 @@ request_id = "20200611QPB1BE11"
 
 poll_url = "https://api.veridata.io/v1/records?request_id={}".format(request_id)
 
-response = requests.get(url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
+response = requests.get(poll_url, auth=('<INSERT API_KEY>', '<INSERT API_TOKEN>'))
 
 # Get the JSON
 contents = response.text
@@ -261,7 +267,9 @@ result = json.loads(contents)
 
 ```json
 {
-  "request_id": "20200611QPB1BE11",
+  "request": {
+    "request_id": "20200611QPB1BE11"
+  },
   "status": "processing"
 }
 ```
@@ -385,14 +393,16 @@ result = json.loads(contents)
 
 ```json
 {
-	"request_id": "20200611QPB1BE11",
-    "firstName": "John",
-    "middleName": null,
-    "lastName": "Smith",
-    "address": null,
-    "dob": null,
-    "county": "Allegany",
-    "state": "MD",
+    "requests": {
+        "request_id": "20200611QPB1BE11",
+        "firstName": "John",
+        "middleName": null,
+        "lastName": "Smith",
+        "address": null,
+        "dob": null,
+        "county": "Allegany",
+        "state": "MD"
+    },
 	"failed_timestamp": "2020-06-11 03:05:23",
 	"status": "failed",
 	"note": "Please retry the request or contact your Veridata representative"
