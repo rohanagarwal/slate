@@ -34,10 +34,10 @@ Create a NSOPW (National Sex Offender Public Website) search request by providin
 import requests 
 import json
 
-# Search John Smith with DOB 01/01/1970
+# Search Joe Shmoe with DOB 01/01/1970
 search_type = "nsopw"
-first_name = "John"
-last_name = "Smith"
+first_name = "Joe"
+last_name = "Shmoe"
 dob = "01/01/1970"
 url = "https://api.veridata.io/v1/search?searchType={}&firstName={}&lastName={}&dob={}".format(search_type, first_name, last_name, dob)
 
@@ -57,7 +57,9 @@ Make sure to replace the API key and API token.
 
 ```json
 {
-  "request_id": "20200604X4IWOOFM"
+  "request": {
+    "request_id": "20200604X4IWOOFM"
+  }
 }
 ```
 
@@ -120,12 +122,12 @@ result = json.loads(contents)
 {
 	"request": {
 		"request_id": "20200604X4IWOOFM",
-		"firstName": "John",
-		"lastName": "Smith",
+		"firstName": "Joe",
+		"lastName": "Shmoe",
 		"dob": "01/01/1970"
 	},
 	"records": [{
-		"name": "Smith, John",
+		"name": "Shmoe, Joe",
 		"age": {
 			"type": "dateOfBirth",
 			"value": "01/01/1970"
@@ -142,8 +144,8 @@ result = json.loads(contents)
 {
     "request": {
         "request_id": "20200604X4IWOOFM",
-        "firstName": "John",
-        "lastName": "Smith",
+        "firstName": "Joe",
+        "lastName": "Shmoe",
         "dob": "01/01/1970"
     },
 	"failed_timestamp": "2020-06-04 05:05:54",
@@ -180,11 +182,11 @@ We are also adding new capabilities to do custom filtering of the records. We cu
 import requests 
 import json
 
-# Search John Smith in Allegany, Maryland
+# Search Joe Shmoe in Allegany, Maryland
 search_type = "countycriminal"
-first_name = "John"
+first_name = "Joe"
 middle_name = ""
-last_name = "Smith"
+last_name = "Shmoe"
 county = "Allegany"
 state = "md"
 filing_date = 7 # filter to last 7 years of records based on record filing date
@@ -214,7 +216,9 @@ Make sure to replace the API key and API token.
 
 ```json
 {
-  "request_id": "20200611QPB1BE11"
+  "request": {
+    "request_id": "20200611QPB1BE11"
+  }
 }
 ```
 
@@ -280,9 +284,9 @@ result = json.loads(contents)
 {
 	"request": {
 		"request_id": "20200611QPB1BE11",
-		"firstName": "John",
+		"firstName": "Joe",
 		"middleName": null,
-		"lastName": "Smith",
+		"lastName": "Shmoe",
 		"address": null,
 		"dob": null,
 		"county": "Allegany",
@@ -290,7 +294,7 @@ result = json.loads(contents)
 	},
     "filtered_records": [{
             "defendant_information": {
-                    "name": "Smith, John Alexander",
+                    "name": "Shmoe, Joe Alexander",
                     "dob": "01/01/1970", 
                     "address": "123 Main Street, FLINTSTONE MD, 21530-0000",
                     "race": "White",
@@ -327,7 +331,7 @@ result = json.loads(contents)
     },
 	"records": [{
 		"defendant_information": {
-			"name": "Smith, John Alexander",
+			"name": "Shmoe, Joe Alexander",
 			"dob": "01/01/1970",
 			"address": "123 Main Street, FLINTSTONE MD, 21530-0000",
 			"race": "White",
@@ -363,7 +367,7 @@ result = json.loads(contents)
 		}]
 	}, {
 		"defendant_information": {
-			"name": "Smith, John Peter",
+			"name": "Shmoe, Joe Peter",
 			"dob": "12/03/1962",
 			"address": "123 Main Street, FLINTSTONE MD, 21532-0000",
 			"race": "White",
@@ -395,9 +399,9 @@ result = json.loads(contents)
 {
     "requests": {
         "request_id": "20200611QPB1BE11",
-        "firstName": "John",
+        "firstName": "Joe",
         "middleName": null,
-        "lastName": "Smith",
+        "lastName": "Shmoe",
         "address": null,
         "dob": null,
         "county": "Allegany",
